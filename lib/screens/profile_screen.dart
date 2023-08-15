@@ -66,11 +66,14 @@ class ProfilePage extends StatelessWidget {
         ),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(
+            height: 16,
+          ),
           image_picker_widget(),
           Text(
-            userName,
+            "Rodiyat Adesola",
             style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -81,8 +84,8 @@ class ProfilePage extends StatelessWidget {
             style: TextStyle(color: Colors.lightGreen),
           ),
           TextFieldWidget(
-            title: "UserName",
-            hintText: 'RodiyatBebe1',
+            title: "Username",
+            hintText: 'Rodiyat Bebe',
             controller: _usernameController,
             borderColor: Colors.green,
             validator: (input) {
@@ -101,6 +104,7 @@ class ProfilePage extends StatelessWidget {
           TextFieldWidget(
               title: "First name",
               hintText: "Rodiyat",
+              borderColor: Colors.green,
               validator: (String value) {
                 if (value.isEmpty) {
                   return 'Please enter your first name';
@@ -128,6 +132,7 @@ class ProfilePage extends StatelessWidget {
           TextFieldWidget(
               title: "Last name",
               hintText: "Adesola",
+              borderColor: Colors.green,
               validator: (String value) {
                 if (value.isEmpty) {
                   return 'Please enter your last name';
@@ -155,6 +160,7 @@ class ProfilePage extends StatelessWidget {
           TextFieldWidget(
               title: "Email",
               hintText: 'RodiyatAdesola@gmail.com',
+              borderColor: Colors.green,
               validator: (String? input) {
                 if (input!.isEmpty) {
                   return 'Email is required!';
@@ -172,14 +178,14 @@ class ProfilePage extends StatelessWidget {
           TextFieldWidget(
               title: "Phone number",
               hintText: '+23488476848838',
+              borderColor: Colors.green,
               validator: (String value) {
                 if (value.isEmpty) {
                   return 'Please enter your phone number';
                 }
-
-                // Check if the phone number is in a valid format (e.g., 123-456-7890)
-                if (!RegExp(r'^\d{3}-\d{3}-\d{4}$').hasMatch(value)) {
-                  return 'Please enter a valid phone number (e.g., 123-456-7890)';
+// Check if the phone number is in a valid format (e.g., 0803xxxxxxx or +234803xxxxxxx)
+                if (!RegExp(r'^(\+?234|0)[789]\d{9}$').hasMatch(value)) {
+                  return 'Please enter a valid Nigerian phone number';
                 }
 
                 // All validation rules passed, return null
@@ -207,15 +213,18 @@ class image_picker_widget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.center,
-      child: Container(
-        width: 94,
-        height: 92,
-        decoration: const BoxDecoration(shape: BoxShape.circle),
-        child: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.camera_alt_rounded,
-            size: 32,
+      child: CircleAvatar(
+        radius: 90,
+        child: Container(
+          width: 94,
+          height: 92,
+          decoration: const BoxDecoration(shape: BoxShape.circle),
+          child: IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.camera_alt_rounded,
+              size: 32,
+            ),
           ),
         ),
       ),

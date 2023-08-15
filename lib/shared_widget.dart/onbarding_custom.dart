@@ -166,9 +166,9 @@ class OnboardingScreen2 extends StatelessWidget {
             ),
             const TextWidget(
               text: "Book Train Tickets!",
-              fontSize: 32,
-              fontWeight: FontWeight.normal,
-              color: Color.fromARGB(255, 25, 13, 186),
+              fontSize: 34,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 51, 65, 188),
             ),
             const SizedBox(
               height: 20,
@@ -233,7 +233,7 @@ class OnboardingScreen3 extends StatelessWidget {
               text: "Freedom at your\nfingertips",
               fontSize: 34,
               fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 51, 62, 209),
+              color: Color.fromARGB(255, 51, 65, 188),
             ),
             const SizedBox(
               height: 16,

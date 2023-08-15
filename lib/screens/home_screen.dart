@@ -95,6 +95,14 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Settings'),
               onTap: () {
                 // Navigate to settings screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsScreen(
+                      userName: '',
+                    ),
+                  ),
+                );
               },
             ),
             ListTile(

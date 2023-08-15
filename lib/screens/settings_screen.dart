@@ -32,7 +32,7 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(radius: 67, child: image_picker_widget()),
+              image_picker_widget(),
               SizedBox(
                 height: 10,
               ),
@@ -62,6 +62,9 @@ class SettingsScreen extends StatelessWidget {
               CustomContainerWidget(
                 text: "Update Password",
                 onTap: () => navigateToScreen(context, UpdatePasswordScreen()),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               CustomContainerWidget(
                 text: "Help Center",

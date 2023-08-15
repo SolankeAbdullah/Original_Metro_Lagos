@@ -4,6 +4,5 @@ class AppImages {
 
 class AppSvgs {
 //svg
-  static const googleIcon = 'assets/images/google-icon.svg';
-
+  static const googleIcon = 'assets/images/svgs/google_icon.svg';
 }

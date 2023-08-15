@@ -6,7 +6,6 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -31,18 +30,23 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Padding(
         padding: const EdgeInsets.only(left: 37.0, right: 37.0),
         child: Center(
-          child: Container(
-            width: 200,
-            height: 200,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color.fromARGB(0, 118, 114, 114),
-            ),
-            child: const Image(
-              image: AssetImage('assets/images/pngs/splashscreen.jpeg'),
-              fit: BoxFit.cover,
-            ),
-          ),
+          child: _buildSplashImage(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSplashImage() {
+    return CircleAvatar(
+      radius: 100,
+      backgroundColor:
+          const Color.fromARGB(0, 118, 114, 114), // Set the background color
+      child: SizedBox(
+        width: 200,
+        height: 200,
+        child: Image(
+          image: AssetImage('assets/images/pngs/splashscreen.jpeg'),
+          fit: BoxFit.cover,
         ),
       ),
     );
