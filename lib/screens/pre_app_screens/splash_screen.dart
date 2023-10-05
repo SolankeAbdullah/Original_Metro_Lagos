@@ -42,11 +42,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return Container(
       width: screenWidth * 0.9, // Adjust the width as needed
       height: screenHeight * 0.9,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle, // Set the shape to circle
         color: Colors.blue, // Set the background color
       ),
-      child: Image(
+      child: const Image(
         image: AssetImage('assets/images/pngs/splashscreen.jpeg'),
         fit: BoxFit.cover,
       ),

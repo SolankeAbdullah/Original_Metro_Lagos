@@ -22,13 +22,12 @@ class ReusableDropdownContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double containerWidth = width ?? MediaQuery.of(context).size.width;
     // Use the provided width if not null, otherwise use 90% of screen width
 
     final borderRadius = BorderRadius.circular(10);
 
     return Container(
-      width: containerWidth, // Use the calculated width
+      width: width, // Use the calculated width
       height: 66,
       decoration: BoxDecoration(
         color: const Color(0xFFFDFDFD),
@@ -54,8 +53,8 @@ class ReusableDropdownContainer extends StatelessWidget {
                 Text(
                   labelText,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w200),
-                  overflow: TextOverflow
-                      .ellipsis, // Truncate and add ellipsis if necessary
+                  overflow: TextOverflow.ellipsis,
+                  // Truncate and add ellipsis if necessary
                   maxLines: 1, // Display only one line of text
                 ),
               ],

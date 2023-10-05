@@ -53,7 +53,7 @@ class _OnboardingScreenPageState extends State<OnboardingScreenPage> {
                   imagePath: "assets/images/pngs/Onboarding3.jpeg",
                   title: "Freedom at your\nfingertips",
                   description: "you decide the place & time",
-                )
+                ),
               ],
             ),
             Positioned(
