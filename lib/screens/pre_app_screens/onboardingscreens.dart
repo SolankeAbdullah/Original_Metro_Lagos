@@ -18,47 +18,68 @@ class _OnboardingScreenPageState extends State<OnboardingScreenPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-                _currentStep = (index + 1) * (100 / _totalSteps);
-              });
-            },
-            children: const [
-              OnboardingScreen(),
-              OnboardingScreen2(),
-              OnboardingScreen3()
-            ],
-          ),
-          Positioned(
-            bottom: 30,
-            right: 30,
-            child: CircularStepFAB(
-              currentStep: _currentStep,
-              progressColor: _progressColor,
-              onPressed: () {
-                if (_currentPage < _totalSteps - 1) {
-                  _pageController.nextPage(
-                    duration: const Duration(milliseconds: 100),
-                    curve: Curves.ease,
-                  );
-                } else {
-                  // Navigate to SignUp page if on the last page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()),
-                  );
-                }
+      body: Container(
+        width: screenWidth * 0.9, // Adjust the width as needed
+        height: screenHeight * 0.9,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                  _currentStep = (index + 1) * (100 / _totalSteps);
+                });
               },
+              children: const [
+                OnboardingScreenWidget(
+                  imagePath: "assets/images/pngs/OnboardingPic.png",
+                  title: "Top Class Train\nRides",
+                  description:
+                      "Where the best destinations\nmeets your  taste of travel.",
+                ),
+                OnboardingScreenWidget(
+                  imagePath: "assets/images/pngs/Onboarding1.jpeg",
+                  title: "Book Train Tickets!",
+                  description: "• Live journey info at a glance\n"
+                      "• Quick travel Updates\n"
+                      "• Secure Payment portals",
+                ),
+                OnboardingScreenWidget(
+                  imagePath: "assets/images/pngs/Onboarding3.jpeg",
+                  title: "Freedom at your\nfingertips",
+                  description: "you decide the place & time",
+                )
+              ],
             ),
-          ),
-        ],
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: CircularStepFAB(
+                currentStep: _currentStep,
+                progressColor: _progressColor,
+                onPressed: () {
+                  if (_currentPage < _totalSteps - 1) {
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 100),
+                      curve: Curves.ease,
+                    );
+                  } else {
+                    // Navigate to SignUp page if on the last page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUpScreen()),
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

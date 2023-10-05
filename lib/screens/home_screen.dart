@@ -2,44 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:real_metro/screens/ticket_screen.dart';
 
+import '../models/user.dart';
+import '../shared_widget.dart/reusable_dropdown_container.dart';
+import '../shared_widget.dart/train_details_widget.dart';
+import 'available_screen.dart';
 import 'profile_screen.dart';
 import 'settings_screen.dart';
+import "dart:ui_web";
 
-void main() => runApp(const MyApp());
+import 'package:real_metro/models/train.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key, required this.userName});
+  final String userName;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(userName: 'John Doe'),
-    );
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key, required this.userName});
+class _HomeScreenState extends State<HomeScreen> {
   final logger = Logger();
-  final String userName;
 
   void _onSearchTicketsPressed(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => ProfilePage(
-                userName: "",
-              )),
+      MaterialPageRoute(builder: (context) => MyTicketsScreen()),
     ).then((value) {
       // This code block will be executed when returning from the ProfilePage
       Navigator.pop(context);
-      // Add any necessary actions or logic here.
     });
   }
 
+  Train? selectedTrain = Train.trainList[0];
+  final List<Train> trainList = Train.trainList;
+
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    User user = User(
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+      email: '',
+      password: '',
+      picture:
+          'https://scontent.fabv2-2.fna.fbcdn.net/v/t1.18169-9/429991_121524334639716_1908521857_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFrIqg8hn1nqYMQ4sL-lk1h7VdRlB21WTXtV1GUHbVZNRCxsdUbdtCN2m5UO1RZchgP9nUEhB-UGWdO2qzTne-f&_nc_ohc=mSxd1S3or-oAX8pBW0A&_nc_ht=scontent.fabv2-2.fna&oh=00_AfCh4B_QHXcrB_33c4E-zR5sWKCsBCZim3QIBMTuCJqsBw&oe=64F73137',
+    );
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFFFFF),
@@ -67,12 +76,11 @@ class HomeScreen extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const UserAccountsDrawerHeader(
-              accountName: Text('Soloanke Abdullah'),
-              accountEmail: Text('solankeabdullah@gmail.com'),
+            UserAccountsDrawerHeader(
+              accountName: Text('${user.firstName} ${user.lastName}'),
+              accountEmail: Text(user.email),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://scontent.fabv2-2.fna.fbcdn.net/v/t1.18169-9/429991_121524334639716_1908521857_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFrIqg8hn1nqYMQ4sL-lk1h7VdRlB21WTXtV1GUHbVZNRCxsdUbdtCN2m5UO1RZchgP9nUEhB-UGWdO2qzTne-f&_nc_ohc=mSxd1S3or-oAX8pBW0A&_nc_ht=scontent.fabv2-2.fna&oh=00_AfCh4B_QHXcrB_33c4E-zR5sWKCsBCZim3QIBMTuCJqsBw&oe=64F73137'),
+                backgroundImage: NetworkImage(user.picture),
               ),
             ),
             ListTile(
@@ -209,7 +217,7 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 4),
-              Text('Hello! $userName'),
+              Text('Hello! ${widget.userName}'),
               const SizedBox(height: 4),
               const Text(
                 'Where are you going?',
@@ -229,45 +237,34 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(23, 29, 23, 29),
                   child: Column(
                     children: [
-                      Stack(
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          SharedContainer(
-                            title: 'Departure Station',
-                            description: 'Ikeja, Lagos',
-                            height: 66,
-                            width: (mediaQueryData) =>
-                                mediaQueryData.size.height,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          const Positioned(
-                            right: 8,
-                            top: 8,
-                            child: Icon(Icons.swap_vert_circle),
-                          ),
-                        ],
+                      ReusableDropdownContainer(
+                        labelText: 'Departure Station',
+                        selectedValue:
+                            selectedTrain?.departure ?? 'Select Departure',
+                        trainList: trainList,
+                        onSelected: (Train? newValue) {
+                          setState(() {
+                            selectedTrain = newValue;
+                          });
+                        },
+                        displayProperty: 'departure',
+                        width: width * 0.9,
                       ),
                       const SizedBox(
                         height: 8,
                       ),
-                      Stack(
-                        children: [
-                          SharedContainer(
-                            title: "Arrival station",
-                            description: 'Ibadan, Oyo state',
-                            height: 66,
-                            width: (mediaQueryData) =>
-                                mediaQueryData.size.height,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          const Positioned(
-                            right: 8,
-                            top: 8,
-                            child: Icon(Icons.swap_vert_circle),
-                          ),
-                        ],
+                      ReusableDropdownContainer(
+                        width: width * 0.9,
+                        labelText: 'Arrival Station',
+                        selectedValue:
+                            selectedTrain?.arrival ?? 'Select Arrival',
+                        trainList: trainList,
+                        onSelected: (Train? newValue) {
+                          setState(() {
+                            selectedTrain = newValue;
+                          });
+                        },
+                        displayProperty: 'arrival',
                       ),
                       const SizedBox(
                         height: 15,
@@ -275,27 +272,34 @@ class HomeScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: SharedContainer(
-                              title: "Departure",
-                              description: 'Jun 24, 2023',
-                              height: 64,
-                              width: (mediaQueryData) =>
-                                  mediaQueryData.size.width * 0.40,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+                          ReusableDropdownContainer(
+                            width: screenWidth * 0.30,
+                            labelText: 'Arrival Station',
+                            selectedValue:
+                                selectedTrain?.arrival ?? 'Select Arrival',
+                            trainList: trainList,
+                            onSelected: (Train? newValue) {
+                              setState(() {
+                                selectedTrain = newValue;
+                              });
+                            },
+                            displayProperty: 'arrival',
                           ),
                           const SizedBox(
                             width: 14,
                           ),
-                          SharedContainer(
-                            title: "Arrival station",
-                            description: 'Jun 24, 2023',
-                            height: 64,
-                            width: (mediaQueryData) =>
-                                mediaQueryData.size.width * 0.40,
-                            borderRadius: BorderRadius.circular(20),
+                          ReusableDropdownContainer(
+                            width: screenWidth * 0.30,
+                            labelText: 'Duration',
+                            selectedValue:
+                                selectedTrain?.duration ?? 'Select Duration',
+                            trainList: trainList,
+                            onSelected: (Train? newValue) {
+                              setState(() {
+                                selectedTrain = newValue;
+                              });
+                            },
+                            displayProperty: 'duration',
                           ),
                         ],
                       ),
@@ -322,7 +326,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 26),
-              UpcomingTicketsContainer(),
+              TrainListWidget(trainListFuture: fetchTrainList()),
             ],
           ),
         ),
@@ -331,302 +335,59 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class SharedContainer extends StatelessWidget {
-  final String title;
-  final String description;
-  final double height;
-  final double Function(MediaQueryData) width;
-  final BorderRadius borderRadius;
-  const SharedContainer({
-    super.key,
-    required this.title,
-    required this.description,
-    this.height = 60,
-    required this.width,
-    required this.borderRadius,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: height,
-              width: width(MediaQuery.of(context)),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFDFDFD),
-                border: Border.all(color: Colors.blueAccent, width: 1),
-                borderRadius: borderRadius,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0, 3),
-                    blurRadius: 6,
-                    spreadRadius: 0,
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500, fontSize: 12),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      description,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+Future<List<Train>> fetchTrainList() async {
+  await Future.delayed(const Duration(seconds: 2)); // Simulate API call delay
+  return Train.trainList;
 }
 
-class UpcomingTicketsContainer extends StatelessWidget {
+class TrainListWidget extends StatelessWidget {
+  final Future<List<Train>> trainListFuture;
+
+  const TrainListWidget({required this.trainListFuture});
+
   @override
   Widget build(BuildContext context) {
-    String currentTime = DateTime.now().toString();
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: [
-          const Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              'Upcoming  Tickets',
-              style: TextStyle(
-                  color: Color(0xFF042D97), fontWeight: FontWeight.w700),
-            ),
-          ),
-          const SizedBox(
-            height: 14,
-          ),
-          Container(
-            height: 64,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 162, 146, 146)
-                  .withOpacity(0.9)
-                  .withAlpha(144),
-              border: Border.all(style: BorderStyle.none),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text("Departure"),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text("Guse Abuja")
-                        ],
+    return FutureBuilder<List<Train>>(
+      future: trainListFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasData) {
+          final trainList = snapshot.data!;
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: trainList.length,
+            itemBuilder: (context, index) {
+              final train = trainList[index];
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AvailableExpress(
+                        train: train,
                       ),
                     ),
-                  ),
-                  const Expanded(
-                    flex: 1,
-                    child: Icon(Icons.forward_10_rounded),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: const [
-                        Text("Departure"),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text("Guse Abuja")
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(0),
-            // ignore: sized_box_for_whitespace
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 46,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 162, 146, 146)
-                    .withOpacity(0.9)
-                    .withAlpha(144),
-                border: Border.all(style: BorderStyle.none),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    'Date: Sep 10 2023',
-                    style: TextStyle(fontSize: 14, color: Color(0xFF042D97)),
-                  ),
-                  // Add a vertical divider
-                  Expanded(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.access_time,
-                            size: 12,
-                            color: Color(0xFF042D97),
-                          ),
-                          SizedBox(
-                            width: 1.2,
-                          ),
-                          Text(
-                            '20:00',
-                            style: TextStyle(
-                                color: Color(0xFF042D97), fontSize: 12),
-                          ),
-                        ]),
-                  ),
-
-                  Row(
-                    children: const [
-                      Text(
-                        'Duration: 9 hours',
-                        style:
-                            TextStyle(fontSize: 12, color: Color(0xFF042D97)),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 14,
-          ),
-          Container(
-            height: 64,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 162, 146, 146)
-                  .withOpacity(0.9)
-                  .withAlpha(144),
-              border: Border.all(style: BorderStyle.none),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text("Departure"),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text("Guse Abuja")
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    flex: 1,
-                    child: Icon(Icons.forward_10_rounded),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: const [
-                        Text("Departure"),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text("Guse Abuja")
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(0),
-            // ignore: sized_box_for_whitespace
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 46,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 162, 146, 146)
-                    .withOpacity(0.9)
-                    .withAlpha(144),
-                border: Border.all(style: BorderStyle.none),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    'Date: Sep 10 2023',
-                    style: TextStyle(fontSize: 14, color: Color(0xFF042D97)),
-                  ),
-
-                  // Add a vertical divider
-                  Expanded(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.access_time,
-                            size: 12,
-                            color: Color(0xFF042D97),
-                          ),
-                          SizedBox(
-                            width: 1.2,
-                          ),
-                          Text(
-                            '20:00',
-                            style: TextStyle(
-                                color: Color(0xFF042D97), fontSize: 12),
-                          ),
-                        ]),
-                  ),
-                  // Add another vertical divider
-                  Row(
-                    children: const [
-                      Text(
-                        'Duration: 9 hours',
-                        style:
-                            TextStyle(fontSize: 12, color: Color(0xFF042D97)),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+                  );
+                },
+                child: TrainDetailsWidget(train),
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          // Handle error cases here
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        } else {
+          return const Center(
+            child: Text('No data available.'),
+          );
+        }
+      },
     );
   }
 }

@@ -21,7 +21,7 @@ class ProfilePage extends StatelessWidget {
       // Simulate API call delay
       await Future.delayed(const Duration(seconds: 2));
 
-      // Dummy API call using JSONPlaceholder's fake API
+      // mAKE API call using JSONPlaceholder's API
       final response = await http.post(
         Uri.parse('https://jsonplaceholder.typicode.com/posts'),
         body: jsonEncode({

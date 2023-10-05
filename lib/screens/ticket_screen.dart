@@ -62,27 +62,22 @@ class MyTicketsScreen extends StatelessWidget {
                       itemCount: trainList.length,
                       itemBuilder: (context, index) {
                         final train = trainList[index];
-                        return Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                // Navigate to the "Call" page when the container is tapped
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AvailableExpress(
-                                      train: train,
-                                    ),
+                        return Column(children: [
+                          InkWell(
+                            onTap: () {
+                              // Navigate to the "Call" page when the container is tapped
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AvailableExpress(
+                                    train: train,
                                   ),
-                                );
-                              },
-                              child: TrainDetailsWidget(train),
-                            ),
-                            // Replicate the TrainDetailsWidget 10 times
-                            for (int i = 0; i < 10; i++)
-                              TrainDetailsWidget(train),
-                          ],
-                        );
+                                ),
+                              );
+                            },
+                            child: TrainDetailsWidget(train),
+                          ),
+                        ]);
                       },
                     );
                   } else {

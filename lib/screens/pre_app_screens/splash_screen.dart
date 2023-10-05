@@ -37,17 +37,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget _buildSplashImage() {
-    return CircleAvatar(
-      radius: 100,
-      backgroundColor:
-          const Color.fromARGB(0, 118, 114, 114), // Set the background color
-      child: SizedBox(
-        width: 200,
-        height: 200,
-        child: Image(
-          image: AssetImage('assets/images/pngs/splashscreen.jpeg'),
-          fit: BoxFit.cover,
-        ),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    return Container(
+      width: screenWidth * 0.9, // Adjust the width as needed
+      height: screenHeight * 0.9,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle, // Set the shape to circle
+        color: Colors.blue, // Set the background color
+      ),
+      child: Image(
+        image: AssetImage('assets/images/pngs/splashscreen.jpeg'),
+        fit: BoxFit.cover,
       ),
     );
   }

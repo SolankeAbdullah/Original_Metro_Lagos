@@ -16,6 +16,7 @@ class MetroLagosApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(AssetImage('assets/images/pngs/splashscreen.jpeg'), context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Metro Lagos',
